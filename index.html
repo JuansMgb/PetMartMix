@@ -10,7 +10,24 @@
   </head>
   <body>
     <div id="root">
-      <h1 class="bg-yellow-200 text-2xl">furry friend</h1>
+      
+
+      <div class="container" id="app">
+        <form class="form" method="POST">
+            <h2>Registro</h2>
+            <p type="Nombres:"><input placeholder="Ingresa tu nombre.." type="text" required id="nombre" name="nombre"
+                v-model="nombres" v-on:keyup.enter="agregarUsuario"></input></p>
+          
+            <p type="Usuario:"><input placeholder="Ingresa tu nuevo usuario.." type="text" required id="usuario"
+                name="usuario" minlength="4" v-model="nuevoUsuario"
+                v-on:keyup.enter="agregarUsuario"></input></p>
+           
+            <button class="boton" type="submit" @click="agregarUsuario" @click="calcularEdad">registro
+            </button>
+            <a class="boton" href="login.html" >Sign In</a>
+      
+      </div>
+
     </div>
     <script src="main.js"></script>
   </body>
