@@ -13,7 +13,7 @@
       
 
       <div class="container" id="app">
-        <form class="form" method="POST">
+        <form class="form" method="POST" @submit.prevent>
             <h2>Registro</h2>
             <p type="Nombres:"><input placeholder="Ingresa tu nombre.." type="text" required id="nombre" name="nombre"
                 v-model="nombres" v-on:keyup.enter="agregarUsuario"></input></p>
@@ -25,6 +25,7 @@
             <button class="boton" type="submit" @click="agregarUsuario" @click="calcularEdad">registro
             </button>
             <a class="boton" href="login.html" >Sign In</a>
+        </form>
       
       </div>
 
