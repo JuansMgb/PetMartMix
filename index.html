@@ -15,29 +15,60 @@
   <section id="app">
     <!-- Panel de loginogin -->
     
-    <div  v-if="!successfullLogin">
+    <div class="" v-if="!successfullLogin">
         <form @submit.prevent="login">
-            <div >
-                <img src="" alt="login-icon" >
+            <div>
+                <img src="" alt="icon-login" >
                 <h2 >Iniciar Sesión</h2>
             </div>
-          <div >
+          <div>
             <label for="username" >Usuario:</label>
-            <input type="text"  id="username" v-model="username">
+            <input type="text"  id="username" v-model="username" placeholder="Usuario" required>
           </div>
           <div >
-            <label for="current-password" >Contraseña:</label>
-            <input type="password" id="current-password" v-model="password">
+            <label for="psd-password" >Contraseña:</label>
+            <input type="password" id="psd-password" v-model="password" placeholder="clave" required>
           </div>
           <button type="submit" >Ingresar</button>
         </form>
       </div>
 
+        <!-- Panel de opciones de administrador -->
+
+        <div class="" v-if="successfullLogin">
+            <nav class="nav" >
+                <div class="">
+
+                    <form class="">
+                      <div class="">
+                        <label for="option" class="">Actividad:</label>
+                        <select class="" v-model="option" id="option">
+                          <option  disabled>-- Options --</option>
+                          <option value="adoptar">Adoptar</option>
+                          <option value="adopcion">Dar en adopción</option>
+                          <option value="administrar" v-if="getTypeUser">Adminitración</option>
+                        </select>
+                      </div>
+                      
+                    </form>
+                    
+                    <button type="button" class="" @click="logout">
+                      Cerrar Sesion
+                    </button>
+                  
+                </div>
+              </nav>
+        </div>
+
+
+
+      </section>
+
 
      
   
   
-  <script src="./main.js" type="module"></script>
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+     <script src="./main.js" type="module"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </body>
 </html>
