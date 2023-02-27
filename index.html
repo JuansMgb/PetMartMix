@@ -4,71 +4,231 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>la Casa de las Mascotas</title>
+    <title>La casa de Las Mascotas</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
     <link rel="stylesheet" href="./styles.css">
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
-    <link rel="shortcut icon" href="" type="image/x-icon">
+    <link rel="shortcut icon" href="./assets/img/logo.png" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css" />
 </head>
-
 <body>
     
   <section id="app">
-    <!-- Panel de loginogin -->
-    
+
+    <!-- furmalario de registro -->
+
     <div class="" v-if="!successfullLogin">
         <form @submit.prevent="login">
-            <div>
-                <img src="" alt="icon-login" >
-                <h2 >Iniciar Sesión</h2>
-            </div>
-          <div>
-            <label for="username" >Usuario:</label>
-            <input type="text"  id="username" v-model="username" placeholder="Usuario" required>
+
+          <div class="mb-3">
+            <label for="username" class="">Usuario:</label>
+            <input type="text" class="" id="username" v-model="username">
           </div>
-          <div >
-            <label for="psd-password" >Contraseña:</label>
-            <input type="password" id="psd-password" v-model="password" placeholder="clave" required>
+          <div class="mb-3">
+            <label for="current-password" class="">Contraseña:</label>
+            <input type="password" class="" id="current-password" v-model="password">
           </div>
-          <button type="submit" >Ingresar</button>
+          <button type="submit" class="">Ingresar</button>
         </form>
       </div>
 
-        <!-- Panel de opciones de administrador -->
+    <!-- Panel de Navbar -->
 
-        <div class="" v-if="successfullLogin">
-            <nav class="nav" >
+      <div class="" v-if="successfullLogin">
+        <nav class="" >
+          <div class="">
+            <div>
+              <img :src= 'getPhoto' alt="photo" class=""> 
+              <a class="" href="#">{{getFullName}}</a>
+            </div>
+            
+              <form class="">
                 <div class="">
+                  <label for="activity" class="">Actividad:</label>
+                  <select class="" v-model="activity" id="activity">
+                    <option disabled>-- Seleccione la actividad que desea realizar --</option>
+                    <option value="adoptar">Adoptar</option>
+                    <option value="dar-en-adopcion">Dar en adopción</option>
+                    <option value="administrar" v-if="getTypeUser">Adminitración</option>
+                  </select>
 
-                    <form class="">
-                      <div class="">
-                        <label for="option" class="">Actividad:</label>
-                        <select class="" v-model="option" id="option">
-                          <option  disabled>-- Options --</option>
-                          <option value="adoptar">Adoptar</option>
-                          <option value="adopcion">Dar en adopción</option>
-                          <option value="administrar" v-if="getTypeUser">Adminitración</option>
-                        </select>
-                      </div>
-                      
-                    </form>
-                    
-                    <button type="button" class="" @click="logout">
-                      Cerrar Sesion
-                    </button>
-                  
                 </div>
-              </nav>
+                
+              </form>
+             <button type="button" class="" style="margin-left: 10px;" @click="logout">
+                Cerrar Sesión
+              </button>
+            
+          </div>
+        </nav>
+      </div>
+
+      <!-- Panel de Adopcion -->
+
+      <div class="" v-if="activity==='adoptar' && successfullLogin">
+        <div class="row">
+
+          <div class="" v-for="(pet,index) in (pets.filter(el=>el.state==='available'))" :key="index">
+            <div class="" >
+              <img :src="pet.photo" class="" :alt="index">
+              <div class="">
+                <h5 class="">{{pet.name}}</h5>
+                <p class="">{{pet.description}}</p>
+              </div>
+              <ul class="">
+                <li class=""><span class="">Especie: </span> {{pet.species}}</li>
+                <li class=""><span class="">Raza: </span> {{pet.race}}</li>
+                <li class=""> <span class="">Genero: </span>{{(pet.genre==='Male')?'Macho':'Hembra'}}</li>
+                <li class=""><span class="">Edad: </span>{{pet.age}}</li>
+              </ul>
+              <div class="">
+                <a href="#" class="" :id="pets.map(el => el.name).indexOf(pet.name)" @click="adopt">Adoptar</a>
+              </div>
+            </div> 
+          </div>
+          
+          
         </div>
+      </div>
 
+      <!--  Panel de Administracion -->
 
+      <div class="" v-if="activity==='administrar' && successfullLogin">
+        <table class="">
+          <thead>
+            <tr>
+              <th scope="col" class="d-none d-sm-table-cell">Mascota</th>
+              <th scope="col">Nombre</th>
+              <th scope="col">Especie</th>
+              <th scope="col">Genero</th>
+              <th scope="col">Estado</th>
+            </tr>
+          </thead>
 
-      </section>
+          <tbody>
+            <tr v-for="(pet,index) in pets" :key="index">
+              <td class="w-25 d-none d-sm-table-cell"><img :src="pet.photo" alt="pet.name" class="w-25 img-fluid"></td>
+              <td >{{pet.name}}</td>
+              <td>{{pet.species}}</td>
+              <td>{{(pet.genre==='Male')?'Macho':'Hembra'}}</td>
+              <td :class="(pet.state==='available')?'text-dark':'text-danger'">{{(pet.state==='available')?'Disponible':'Adoptado'}}</td>
+            </tr>
+          
+          </tbody>
 
+        </table>
+      </div>
 
+      <!-- Panel de adopción -->
+      
+      <div class="" v-if="activity==='dar-en-adopcion' && successfullLogin">
+        <form class="" @submit.prevent="registerPet">
+
+          <div class="">
+            <img src="./img/casa-de-mascotas.png" alt="login-icon" class="img-fluid w-25 mx-auto d-block ">
+            <h2 class="">Dar en adopción</h2>
+          </div>
+
+          <div class="">
+            <label for="name" class="">Nombre de la mascota:</label>
+            <input type="text" class="" id="name" v-model="name" >
+            <div  class="" v-if="!nameOk">Por favor ingrese el nombre de su mascota.</div>
+          </div>
+
+          <div class="">
+            <label for="species" class="">Seleccione la especie:</label>
+            <select class="" id="species" v-model="species">
+              <option disabled>-- Especie --</option>
+              <option value="perro">Perro</option>
+              <option value="gato">Gato</option>
+            </select>
+            <div  class="" v-if="!speciesOk">Seleccione la especie.</div>
+          </div>
+
+          <div class="">
+            <label for="genre" class="">Seleccione su género:</label>
+            <select class="t" id="genre" v-model="genre">
+              <option disabled>-- género --</option>
+              <option value="Male">Macho</option>
+              <option value="Female">Hembra</option>
+            </select>
+            <div  class="" v-if="!genreOk">Seleccione el género.</div>
+          </div>
+
+          <div class="">
+            <label for="race" class="">Raza:</label>
+            <input type="text" class="" id="race" v-model="race" >
+            <div  class="" v-if="!raceOk">Por ingrese la raza.</div>
+          </div>
+
+          <div class="">
+            <label for="age" class="">Edad en meses:</label>
+            <input type="number" class="" id="age" v-model="age">
+            <div  class="" v-if="!ageOk">Por favor ingrese la edad.</div>
+            <div  class="" v-if="!agePositiveOk">Recuerde que la edad de su mascota debe ingresarse en meses y esta cantidad es positiva.</div>
+          </div>
+
+          <div class="">
+            <label for="description" class="">Deje la descripción de la mascota:</label>
+            <textarea class="" rows="5" id="description" v-model="description"></textarea>
+            <div  class="" v-if="!descriptionOk">Por favor complete este campo.</div>
+          </div>
+          
+          <div class="">
+              <button type="button" class="" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                Subir Imagen
+              </button>
+              <div  class="" v-if="!imgOk">Recuerde cargar la imagen.</div>   
+          </div>
+
+          <button type="submit" class="">Registrar Mascota</button>
      
+        </form>
+
+        <!-- Modal -->
+
+        <div class="" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="">
+            <div class="">
+
+              <div class="">
+                <h1 class="" id="exampleModalLabel">Seleccione la imagen de la mascota:</h1>
+                <button type="button" class="" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+
+              <div class="">
+                <h5 class="" v-if="species===''">¡Por favor, primero seleccione la especie de la mascota!</h5>
+                <div class="" v-if="species==='gato'">
+                  <img src="./img/gato.png" alt="imagen" class="" @click="selectImage">
+                  <img src="./img/gato2.png" alt="imagen" class="" @click="selectImage">
+                  <img src="./img/gato3.png" alt="imagen" class="" @click="selectImage">
+                </div>
+
+                <div class="" v-if="species==='perro'">
+                  <img src=".//img/perro.png" alt="imagen" class="" @click="selectImage">
+                  <img src="./img/perro2.png" alt="imagen" class="" @click="selectImage">
+                  <img src="./img/perro3.png" alt="imagen" class="" @click="selectImage">
+                </div>
+              
+              </div>
+
+              <div class="">
+                <button type="button" class="" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="">Save changes</button>
+              </div> 
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+  </section>
+
+  <script src="./main.js" type="module"></script>
+
   
   
-     <script src="./main.js" type="module"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 </body>
 </html>
